@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, IntentsBitField  } = require('discord.js');
+const { Client, IntentsBitField, cleanCodeBlockContent  } = require('discord.js');
 
 const client = new Client({
     intents: [
@@ -67,9 +67,26 @@ client.on('messageCreate', (message) =>
 
 })
 
+client.on('messageCreate', (message) =>
+{
+    if (message.content === '/rock')
+    {
+        if (getMove() == 'rock')
+        {
+            message.reply('I choose rock! It\'s a tie!');
+        }
 
+        if (getMove() == 'sizzors')
+        {
+            message.reply('I choose sizzors! You win!');
+        }
 
-console.log(getMove());
+        if (getMove() == 'paper')
+        {
+            message.reply('I choose paper! You lose!');
+        }
+    }
+})
 
 
 
