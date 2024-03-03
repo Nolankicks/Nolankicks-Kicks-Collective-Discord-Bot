@@ -32,19 +32,16 @@ client.on('messageCreate', (message) =>
         if (getMove() === 'paper')
         {
             message.reply('I choose paper! It\'s a tie!');
-            getMove();
         }
 
         if (getMove() === 'rock')
         {
             message.reply('I choose rock! You win!');
-            getMove();
         }
 
         if (getMove() === 'scissors')
         {
             message.reply('I choose scissors! You lose!');
-            getMove();
         }
     }
 
@@ -59,19 +56,16 @@ client.on('messageCreate', (message) =>
         if (getMove() === 'sizzors')
         {
             message.reply('I choose sizzors! It\'s a tie!');
-            getMove();
         }
 
         if (getMove() === 'rock')
         {
             message.reply('I choose rock! I lose!');
-            getMove();
         }
 
         if (getMove() === 'paper')
         {
             message.reply('I choose paper! You win!');
-            getMove();
         }
     }
 
@@ -86,25 +80,16 @@ client.on('messageCreate', (message) =>
         if (getMove() === 'rock')
         {
             message.reply('I choose rock! It\'s a tie!');
-            getMove();
         }
 
         if (getMove() === 'sizzors')
         {
             message.reply('I choose sizzors! You win!');
-            getMove();
         }
 
         if (getMove() === 'paper')
         {
             message.reply('I choose paper! You lose!');
-            getMove();
         }
     }
 })
-
-
-
-
-
-
