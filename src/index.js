@@ -14,7 +14,7 @@ const client = new Client({
 
 
 
-client.login(process.env.TOKEN);
+
 
 function getMove() {
     const replies = ['paper', 'rock', 'scissors' ];
@@ -23,73 +23,13 @@ function getMove() {
     return replies[random]
 }
 
-client.on('messageCreate', (message) =>
+
+client.on('interactionCreate', (interaction) =>
 {
-    if (message.author.bot) return;
+    if (!interaction.isChatInputCommand()) return;
+    console.log(interaction);
 
-    if (message.content === '/paper')
-    {
-        if (getMove() === 'paper')
-        {
-            message.reply('I choose paper! It\'s a tie!');
-        }
+}) 
 
-        if (getMove() === 'rock')
-        {
-            message.reply('I choose rock! You win!');
-        }
 
-        if (getMove() === 'scissors')
-        {
-            message.reply('I choose scissors! You lose!');
-        }
-    }
-
-})
-
-client.on('messageCreate', (message) =>
-{
-    if (message.author.bot) return;
-
-    if (message.content === '/sizzors')
-    {
-        if (getMove() === 'sizzors')
-        {
-            message.reply('I choose sizzors! It\'s a tie!');
-        }
-
-        if (getMove() === 'rock')
-        {
-            message.reply('I choose rock! I lose!');
-        }
-
-        if (getMove() === 'paper')
-        {
-            message.reply('I choose paper! You win!');
-        }
-    }
-
-})
-
-client.on('messageCreate', (message) =>
-{
-    if (message.author.bot) return;
-
-    if (message.content === '/rock')
-    {
-        if (getMove() === 'rock')
-        {
-            message.reply('I choose rock! It\'s a tie!');
-        }
-
-        if (getMove() === 'sizzors')
-        {
-            message.reply('I choose sizzors! You win!');
-        }
-
-        if (getMove() === 'paper')
-        {
-            message.reply('I choose paper! You lose!');
-        }
-    }
-})
+client.login(process.env.TOKEN);
