@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, IntentsBitField, cleanCodeBlockContent  } = require('discord.js');
+const { Client, IntentsBitField, cleanCodeBlockContent, channelLink  } = require('discord.js');
 
 const client = new Client({
     intents: [
@@ -27,6 +27,17 @@ function getMove() {
 client.on('interactionCreate', (interaction) =>
 {
     if (!interaction.isChatInputCommand()) return;
+    if (interaction.channelId != process.env.CHANNEL_ID)
+    {
+        interaction.reply(
+            {
+                content: `You can only use this command in the ${`https://discord.com/channels/@me/${process.env.CHANNEL_ID}`} channel!`,
+                ephemeral: true
+            }
+        );
+        return;
+
+    }
     console.log(interaction);
 
     if (interaction.commandName === 'rps') 
