@@ -80,11 +80,16 @@ module.exports["RPS"] = async (Client) =>
                         interaction.reply('I chose rock, it\'s a tie!');
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, I win!');
+
                         messageCoin.coins -= bet;
                         await messageCoin.save().catch((error) => console.log(error));
                     } else {
                         interaction.reply('I chose scissors, you win!');
                         messageCoin.coins += bet;
+                        if (messageCoin.coins == 0)
+                        {
+                            messageCoin.coins += 1;
+                        }
                         await messageCoin.save().catch((error) => console.log(error));
                     }
                     return;
@@ -96,6 +101,10 @@ module.exports["RPS"] = async (Client) =>
                         interaction.reply('I chose rock, you win!');
                         messageCoin.coins += bet;
                         await messageCoin.save().catch((error) => console.log(error));
+                        if (messageCoin.coins == 0)
+                        {
+                            messageCoin.coins += 1;
+                        }
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, it\'s a tie!');
                     } else {
@@ -115,6 +124,10 @@ module.exports["RPS"] = async (Client) =>
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, you win!');
                         messageCoin.coins += bet;
+                        if (messageCoin.coins == 0)
+                        {
+                            messageCoin.coins += 1;
+                        }
                         await messageCoin.save().catch((error) => console.log(error));
                     } else {
                         interaction.reply('I chose scissors, it\'s a tie!');

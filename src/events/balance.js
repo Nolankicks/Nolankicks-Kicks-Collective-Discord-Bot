@@ -23,11 +23,6 @@ module.exports["Balance"] = async (client, message) => {
         {
            console.log(messageCoin.coins);
             message.reply(`You have ${messageCoin.coins} coins!`);
-            if (messageCoin.coins <= 0)
-            {
-                message.coins = 20;
-                await message.save().catch((err) => console.log(err));
-            }
         }
         else
         {
