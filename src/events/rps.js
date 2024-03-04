@@ -1,4 +1,4 @@
-const { Clent,  } = require('discord.js');
+const { Client  } = require('discord.js');
 
 module.exports["RPS"] = (Client) => 
 {
@@ -26,6 +26,10 @@ module.exports["RPS"] = (Client) =>
             return;
     
         }
+        const query = {
+            userID: interaction.user.id,
+            guildID: interaction.guild.id,
+        };
         console.log(interaction);
     
         if (interaction.commandName === 'rps') 

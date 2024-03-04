@@ -23,6 +23,10 @@ const commands = [
             }
         ]
     },
+    {
+        name: 'balance',
+        description: 'Check your balance',
+    }
 ];
 const rest = new REST({ version: '10'}).setToken(process.env.TOKEN);
 

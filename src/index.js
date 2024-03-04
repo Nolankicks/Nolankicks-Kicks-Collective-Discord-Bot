@@ -1,6 +1,9 @@
 require('dotenv').config();
 const { Client, IntentsBitField, cleanCodeBlockContent, channelLink  } = require('discord.js');
-
+const mongoose = require('mongoose'); 
+const { RPS } = require('./events/rps.js');
+const { Logger } = require('./events/logger.js');
+const { Balance } = require('./events/balance.js');
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -11,14 +14,27 @@ const client = new Client({
 });
 
 
+(async () => {
+try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to the database');
+    Logger(client);
+    RPS(client);
+    
+    client.on('interactionCreate', (interaction) => 
+    {
+        if (interaction.commandName === 'balance')
+        {
+        Balance(client, interaction);
+        return;
+        }
+    });
 
 
+    client.login(process.env.TOKEN);  
+} catch (error) {
+    console.log(error);
+}
+})();
 
 
-const { Logger } = require('./events/logger.js');
-Logger(client);
-
-const { RPS } = require('./events/rps.js');
-RPS(client);
-
-client.login(process.env.TOKEN);
