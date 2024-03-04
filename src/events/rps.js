@@ -81,9 +81,11 @@ module.exports["RPS"] = async (Client) =>
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, I win!');
                         messageCoin.coins -= bet;
+                        await messageCoin.save().catch((error) => console.log(error));
                     } else {
                         interaction.reply('I chose scissors, you win!');
                         messageCoin.coins += bet;
+                        await messageCoin.save().catch((error) => console.log(error));
                     }
                     return;
                 }
@@ -93,11 +95,13 @@ module.exports["RPS"] = async (Client) =>
                     if (botMove === 'rock') {
                         interaction.reply('I chose rock, you win!');
                         messageCoin.coins += bet;
+                        await messageCoin.save().catch((error) => console.log(error));
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, it\'s a tie!');
                     } else {
                         interaction.reply('I chose scissors, I win!');
                         messageCoin.coins -= bet;
+                        await messageCoin.save().catch((error) => console.log(error));
                     }
                     return;
                 }
@@ -107,9 +111,11 @@ module.exports["RPS"] = async (Client) =>
                     if (botMove === 'rock') {
                         interaction.reply('I chose rock, I win!');
                         messageCoin.coins -= bet;
+                        await messageCoin.save().catch((error) => console.log(error));
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, you win!');
                         messageCoin.coins += bet;
+                        await messageCoin.save().catch((error) => console.log(error));
                     } else {
                         interaction.reply('I chose scissors, it\'s a tie!');
                     }
@@ -125,7 +131,5 @@ module.exports["RPS"] = async (Client) =>
         //Catch and log the error
         console.log(error);     
         }
-       
-    
     }) 
 }
