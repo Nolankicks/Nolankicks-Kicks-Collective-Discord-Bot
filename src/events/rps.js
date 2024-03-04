@@ -1,9 +1,9 @@
 const { Client  } = require('discord.js');
-
-module.exports["RPS"] = (Client) => 
+const Coin = require('./kicksCoinSchema.js');
+module.exports["RPS"] = async (Client) => 
 {
     const client = Client;
-
+    //Get random move
     function getMove() {
         const replies = ['paper', 'rock', 'scissors' ];
         const random = Math.floor(Math.random() * 3)
@@ -11,10 +11,12 @@ module.exports["RPS"] = (Client) =>
         return replies[random]
     }
     
-    
-    client.on('interactionCreate', (interaction) =>
+    //When the user uses the command
+    client.on('interactionCreate', async (interaction) =>
     {
+        //Checks
         if (!interaction.isChatInputCommand()) return;
+        //Checks if the command is in the right channel
         if (interaction.channelId != process.env.CHANNEL_ID)
         {
             interaction.reply(
@@ -26,66 +28,104 @@ module.exports["RPS"] = (Client) =>
             return;
     
         }
+        //Find the users coins
         const query = {
             userID: interaction.user.id,
             guildID: interaction.guild.id,
         };
-        console.log(interaction);
-    
-        if (interaction.commandName === 'rps') 
+        //Get the bet
+        const bet = interaction.options.getInteger('bet');
+        //Log the bet
+        console.log(bet);
+        //Check if the bet is negative
+        if (bet < 0)
         {
-            const rock = interaction.options.getBoolean('rock');
-            const paper = interaction.options.getBoolean('paper');
-            const scissors = interaction.options.getBoolean('scissors');
-            
-            if (rock && paper && scissors) {
-                interaction.reply('You can only choose one option at a time!');
-                return;
-            }
-            if (!rock && !paper && !scissors) {
-                interaction.reply('You need to choose an option!');
-                return;
-            }
-            const botMove = getMove();
-            if (rock)
-            {
-                if (botMove === 'rock') {
-                    interaction.reply('I chose rock, it\'s a tie!');
-                } else if (botMove === 'paper') {
-                    interaction.reply('I chose paper, I win!');
-                } else {
-                    interaction.reply('I chose scissors, you win!');
-                }
-                return;
-            }
-            if (paper)
-            {
-                if (botMove === 'rock') {
-                    interaction.reply('I chose rock, you win!');
-                } else if (botMove === 'paper') {
-                    interaction.reply('I chose paper, it\'s a tie!');
-                } else {
-                    interaction.reply('I chose scissors, I win!');
-                }
-                return;
-            }
-            if (scissors)
-            {
-                if (botMove === 'rock') {
-                    interaction.reply('I chose rock, I win!');
-                } else if (botMove === 'paper') {
-                    interaction.reply('I chose paper, you win!');
-                } else {
-                    interaction.reply('I chose scissors, it\'s a tie!');
-                }
-                return;
-            }
-            if (rock && paper || rock && scissors || paper && scissors) {
-                interaction.reply('You can only choose one option at a time!');
-                return;
-            }
-            
+            interaction.reply('You can\'t bet a negative amount of coins!');
+            return;
         }
+
+        try {
+            //Find the users coins
+            const messageCoin = await Coin.findOne(query);
+            console.log(messageCoin.coins);
+                    //If the user doesn't have enough coins
+        if (bet > messageCoin.coins)
+        {
+            interaction.reply(`You don't have enough coins! You have ${messageCoin.coins} coins!`);
+            return;
+        }
+            //If the command is rps
+            if (interaction.commandName === 'rps') 
+            {
+                //Define the options
+                const rock = interaction.options.getBoolean('rock');
+                const paper = interaction.options.getBoolean('paper');
+                const scissors = interaction.options.getBoolean('scissors');
+                //Makes sure the user can't choose multiple options
+                if (rock && paper && scissors) {
+                    interaction.reply('You can only choose one option at a time!');
+                    return;
+                }
+                //Makes sure the user chooses an option
+                if (!rock && !paper && !scissors) {
+                    interaction.reply('You need to choose an option!');
+                    return;
+                }
+                //Get the bot move
+                const botMove = getMove();
+                //If the player's move is rock
+                if (rock)
+                {
+                    if (botMove === 'rock') {
+                        interaction.reply('I chose rock, it\'s a tie!');
+                    } else if (botMove === 'paper') {
+                        interaction.reply('I chose paper, I win!');
+                        messageCoin.coins -= bet;
+                    } else {
+                        interaction.reply('I chose scissors, you win!');
+                        messageCoin.coins += bet;
+                    }
+                    return;
+                }
+                //If the player's move is paper
+                if (paper)
+                {
+                    if (botMove === 'rock') {
+                        interaction.reply('I chose rock, you win!');
+                        messageCoin.coins += bet;
+                    } else if (botMove === 'paper') {
+                        interaction.reply('I chose paper, it\'s a tie!');
+                    } else {
+                        interaction.reply('I chose scissors, I win!');
+                        messageCoin.coins -= bet;
+                    }
+                    return;
+                }
+                //If the player's move is scissors
+                if (scissors)
+                {
+                    if (botMove === 'rock') {
+                        interaction.reply('I chose rock, I win!');
+                        messageCoin.coins -= bet;
+                    } else if (botMove === 'paper') {
+                        interaction.reply('I chose paper, you win!');
+                        messageCoin.coins += bet;
+                    } else {
+                        interaction.reply('I chose scissors, it\'s a tie!');
+                    }
+                    return;
+                }
+                //If the user chooses multiple options
+                if (rock && paper || rock && scissors || paper && scissors || rock && paper && scissors) {
+                    interaction.reply('You can only choose one option at a time!');
+                    return;
+                }
+            }
+        } catch (error) {
+        //Catch and log the error
+        console.log(error);     
+        }
+       
     
     }) 
 }

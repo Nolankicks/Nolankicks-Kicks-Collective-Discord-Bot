@@ -20,12 +20,19 @@ const commands = [
             name: 'scissors',
             description: 'Choose scissors',
             type: ApplicationCommandOptionType.Boolean,
+            },
+            {
+                name: 'bet',
+                description: 'Bet an amount of coins',
+                type: ApplicationCommandOptionType.Integer,
+                required: true,
             }
         ]
     },
     {
         name: 'balance',
         description: 'Check your balance',
+        
     }
 ];
 const rest = new REST({ version: '10'}).setToken(process.env.TOKEN);
