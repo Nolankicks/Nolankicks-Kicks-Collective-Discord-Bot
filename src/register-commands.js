@@ -7,6 +7,12 @@ const commands = [
         description: 'Play a game of rock, paper, scissors!',
         options: [
             {
+                name: 'bet',
+                description: 'Bet an amount of coins',
+                type: ApplicationCommandOptionType.Integer,
+                required: true,
+            },
+            {
             name: 'rock',
             description: 'Choose rock',
             type: ApplicationCommandOptionType.Boolean,
@@ -21,18 +27,30 @@ const commands = [
             description: 'Choose scissors',
             type: ApplicationCommandOptionType.Boolean,
             },
-            {
-                name: 'bet',
-                description: 'Bet an amount of coins',
-                type: ApplicationCommandOptionType.Integer,
-                required: true,
-            }
-        ]
+
+        ],
     },
     {
         name: 'balance',
         description: 'Check your balance',
-        
+    },
+    {
+        name: 'give',
+        description: 'Give coins to another user',
+        options: [
+            {
+                name: 'user',
+                description: 'The user you are giving coins to',
+                type: ApplicationCommandOptionType.User,
+                required: true,
+            },
+            {
+                name: 'amount',
+                description: 'The amount of coins you are giving',
+                type: ApplicationCommandOptionType.Integer,
+                required: true,
+            }
+        ]
     }
 ];
 const rest = new REST({ version: '10'}).setToken(process.env.TOKEN);

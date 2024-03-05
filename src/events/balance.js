@@ -6,7 +6,7 @@ const Coin = require('./kicksCoinSchema.js');
  * @param {Client} client 
  * @param {Interaction} message 
  */
-
+const { EmbedBuilder } = require('discord.js');
 module.exports["Balance"] = async (client, message) => {
 
 
@@ -22,7 +22,14 @@ module.exports["Balance"] = async (client, message) => {
         if (messageCoin)
         {
            console.log(messageCoin.coins);
-            message.reply(`You have ${messageCoin.coins} coins!`);
+        //message.reply(`You have ${messageCoin.coins} coins!`);
+        const embed = new EmbedBuilder()
+        .setTitle('Balance').
+        setDescription(`You have ${messageCoin.coins} coins!`)
+        .setFooter({ text: 'Play some games to earn more!' });
+        
+        message.reply({ embeds: [embed] });
+
         }
         else
         {
