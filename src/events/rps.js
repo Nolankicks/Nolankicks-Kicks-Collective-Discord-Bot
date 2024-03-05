@@ -17,18 +17,6 @@ module.exports["RPS"] = async (Client) =>
     {
         //Checks
         if (!interaction.isChatInputCommand()) return;
-        //Checks if the command is in the right channel
-        if (interaction.channelId != process.env.CHANNEL_ID)
-        {
-            interaction.reply(
-                {
-                    content: `You can only use this command in the ${`https://discord.com/channels/@me/${process.env.CHANNEL_ID}`} channel!`,
-                    ephemeral: true
-                }
-            );
-            return;
-    
-        }
         //Find the users coins
         const query = {
             userID: interaction.user.id,
@@ -146,6 +134,17 @@ module.exports["RPS"] = async (Client) =>
                     return;
                 }
             }
+            if (messageCoin.coins === null || messageCoin.coins === undefined)
+            {
+                const newCoin = new Coin({
+                    userID: user.id,
+                    guildID: message.guild.id,
+                    coins: 20,
+                });
+    
+                await newCoin.save();
+            }
+            return;
         } catch (error) {
         //Catch and log the error
         console.log(error);     

@@ -33,7 +33,7 @@ module.exports["Give"] = async (client, message) => {
         const recieverCoins = await Coin.findOne(recieverQuery);
         console.log(recieverCoins.coins);
         
-        if (messageCoin && recieverCoins)
+        if (recieverCoins)
         {
             if (messageCoin.coins >= numbertoGive)
             {
@@ -53,16 +53,17 @@ module.exports["Give"] = async (client, message) => {
                 return;
             }
         }
-        else
+        if (recieverCoins.coins === null || recieverCoins.coins === undefined)
         {
             const newCoin = new Coin({
-                userID: message.user.id,
+                userID: user.id,
                 guildID: message.guild.id,
                 coins: 20,
             });
 
             await newCoin.save();
         }
+        return;
 
     } catch (error) {
         console.log(error);

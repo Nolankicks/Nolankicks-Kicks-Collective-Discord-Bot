@@ -29,7 +29,7 @@ module.exports["Balance"] = async (client, message) => {
         .setFooter({ text: 'Play some games to earn more!' });
         
         message.reply({ embeds: [embed] });
-
+        return;
         }
         else
         {
@@ -41,7 +41,7 @@ module.exports["Balance"] = async (client, message) => {
 
             await newCoin.save();
         }
-
+        return;
     } catch (error) {
         console.log(error);
     }
