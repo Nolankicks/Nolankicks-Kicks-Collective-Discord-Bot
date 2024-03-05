@@ -1,5 +1,6 @@
 const { Client  } = require('discord.js');
 const Coin = require('./kicksCoinSchema.js');
+const { EmbedBuilder } = require('discord.js');
 module.exports["RPS"] = async (Client) => 
 {
     const client = Client;
@@ -79,12 +80,13 @@ module.exports["RPS"] = async (Client) =>
                     if (botMove === 'rock') {
                         interaction.reply('I chose rock, it\'s a tie!');
                     } else if (botMove === 'paper') {
-                        interaction.reply('I chose paper, I win!');
-
+                        const paperLoss = new EmbedBuilder().setTitle('I chose paper, I win!').setFooter({ text: 'Better luck next time!' });
+                        interaction.reply({ embeds: [paperLoss] });
                         messageCoin.coins -= bet;
                         await messageCoin.save().catch((error) => console.log(error));
                     } else {
-                        interaction.reply('I chose scissors, you win!');
+                        const scissorsWin = new EmbedBuilder().setTitle('I chose scissors, you win!').setFooter({ text: 'Congratulations!' });
+                        interaction.reply({ embeds: [scissorsWin] });
                         messageCoin.coins += bet;
                         if (messageCoin.coins == 0)
                         {
@@ -98,7 +100,8 @@ module.exports["RPS"] = async (Client) =>
                 if (paper)
                 {
                     if (botMove === 'rock') {
-                        interaction.reply('I chose rock, you win!');
+                        const rockWin = new EmbedBuilder().setTitle('I chose rock, you win!').setFooter({ text: 'Congratulations!' });
+                        interaction.reply({ embeds: [rockWin] });
                         messageCoin.coins += bet;
                         await messageCoin.save().catch((error) => console.log(error));
                         if (messageCoin.coins == 0)
@@ -108,7 +111,8 @@ module.exports["RPS"] = async (Client) =>
                     } else if (botMove === 'paper') {
                         interaction.reply('I chose paper, it\'s a tie!');
                     } else {
-                        interaction.reply('I chose scissors, I win!');
+                        const scissorsLoss = new EmbedBuilder().setTitle('I chose scissors, I win!').setFooter({ text: 'Better luck next time!' });
+                        interaction.reply({ embeds: [scissorsLoss] });
                         messageCoin.coins -= bet;
                         await messageCoin.save().catch((error) => console.log(error));
                     }
@@ -118,11 +122,13 @@ module.exports["RPS"] = async (Client) =>
                 if (scissors)
                 {
                     if (botMove === 'rock') {
-                        interaction.reply('I chose rock, I win!');
+                        const rockLoss = new EmbedBuilder().setTitle('I chose rock, I win!').setFooter({ text: 'Better luck next time!' });
+                        interaction.reply({ embeds: [rockLoss] });
                         messageCoin.coins -= bet;
                         await messageCoin.save().catch((error) => console.log(error));
                     } else if (botMove === 'paper') {
-                        interaction.reply('I chose paper, you win!');
+                        const paperWin = new EmbedBuilder().setTitle('I chose paper, you win!').setFooter({ text: 'Congratulations!' });
+                        interaction.reply({ embeds: [paperWin] });
                         messageCoin.coins += bet;
                         if (messageCoin.coins == 0)
                         {
