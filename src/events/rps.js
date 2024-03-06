@@ -52,6 +52,7 @@ module.exports["RPS"] = async (Client) =>
                         components: [row],
                     }
                 )
+                
             }
         } catch (error) {
             console.log(error);

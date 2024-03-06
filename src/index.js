@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, IntentsBitField, cleanCodeBlockContent, channelLink, EmbedBuilder  } = require('discord.js');
+const { Client, IntentsBitField, cleanCodeBlockContent, channelLink, EmbedBuilder, ActionRowBuilder  } = require('discord.js');
 const mongoose = require('mongoose'); 
 const { RPS } = require('./events/rps.js');
 const { Logger } = require('./events/logger.js');
@@ -29,6 +29,7 @@ try {
         
         return replies[random]
     }
+    const botMove = getMove();
     //Check for balance
     client.on('interactionCreate', (interaction) => 
     {
@@ -48,6 +49,7 @@ try {
         }
     });
     //Check for /RPS
+    
     client.on('interactionCreate', async (interaction) =>
     {
         if (!interaction.isButton()) return;
@@ -57,14 +59,15 @@ try {
         };
         const messageCoin = await Coin.findOne(query);
         console.log(messageCoin.bet)
-        const botMove = getMove();
+        
+        const row = new ActionRowBuilder();
         //Rock Logic
         if (interaction.customId === 'rock')
         {
             if (botMove === 'rock')
             {
                 const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
-                interaction.update({ embeds: [embed] });
+                interaction.update({ embeds: [embed], components: [] });
                 return;
             }
             else if (botMove === 'paper')
@@ -73,7 +76,7 @@ try {
                 await messageCoin.save().catch((error) => console.log(error));
                 const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
                 embed.setColor('Red');
-                interaction.update({ embeds: [embed] });
+                interaction.update({ embeds: [embed], components: []});
                 return;
             
             }
@@ -84,7 +87,7 @@ try {
                 await messageCoin.save().catch((error) => console.log(error));
                 const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
                 embed.setColor('Green');
-                interaction.update({ embeds: [embed] });
+                interaction.update({ embeds: [embed], components: []});
                 return;
             }
             else
@@ -102,7 +105,7 @@ try {
             embed.setColor('Green');
             messageCoin.coins += messageCoin.bet;
             await messageCoin.save().catch((error) => console.log(error));
-            interaction.update({ embeds: [embed] });
+            interaction.update({ embeds: [embed], components: [] });
         }
         else if (botMove === 'scissors')
         {
@@ -110,12 +113,12 @@ try {
             embed.setColor('Red');
             messageCoin.coins -= messageCoin.bet;
             await messageCoin.save().catch((error) => console.log(error));
-            interaction.update({ embeds: [embed] });
+            interaction.update({ embeds: [embed], components: []});
         }
         else if (botMove === 'paper')
         {
             const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
-            interaction.update({ embeds: [embed] });
+            interaction.update({ embeds: [embed], components: []});
         }
         else
         {
@@ -131,12 +134,12 @@ try {
                 embed.setColor('Red');
                 messageCoin.coins -= messageCoin.bet;
                 await messageCoin.save().catch((error) => console.log(error));
-                interaction.update({ embeds: [embed] });
+                interaction.update({ embeds: [embed], components: []});
             }
             else if (botMove === 'scissors')
             {
                 const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
-                interaction.update({ embeds: [embed] });
+                interaction.update({ embeds: [embed], components: []});
             }
             else if (botMove === 'paper')
             {
@@ -144,7 +147,7 @@ try {
                 embed.setColor('Green');
                 messageCoin.coins += messageCoin.bet;
                 await messageCoin.save().catch((error) => console.log(error));
-                interaction.update({ embeds: [embed] });
+                interaction.update({ embeds: [embed], components: []});
             }
             else
             {
