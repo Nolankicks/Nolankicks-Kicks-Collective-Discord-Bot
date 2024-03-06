@@ -14,6 +14,12 @@ const client = new Client({
         IntentsBitField.Flags.MessageContent,
     ],
 });
+function getMove() {
+    const replies = ['paper', 'rock', 'scissors' ];
+    const random = Math.floor(Math.random() * 3)
+    
+    return replies[random]
+}
 
 
 (async () => {
@@ -23,13 +29,8 @@ try {
     Logger(client);
     const rps = RPS(client);
     //GetMove function
-    function getMove() {
-        const replies = ['paper', 'rock', 'scissors' ];
-        const random = Math.floor(Math.random() * 3)
-        
-        return replies[random]
-    }
-    const botMove = getMove();
+    
+    
     //Check for balance
     client.on('interactionCreate', (interaction) => 
     {
@@ -53,6 +54,8 @@ try {
     client.on('interactionCreate', async (interaction) =>
     {
         if (!interaction.isButton()) return;
+        const botMove = getMove();
+        getMove();
         const query = {
             userID: interaction.user.id,
             guildID: interaction.guild.id,
@@ -68,6 +71,7 @@ try {
             {
                 const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
                 interaction.update({ embeds: [embed], components: [] });
+                getMove();
                 return;
             }
             else if (botMove === 'paper')
@@ -77,6 +81,7 @@ try {
                 const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
                 embed.setColor('Red');
                 interaction.update({ embeds: [embed], components: []});
+                getMove();
                 return;
             
             }
@@ -88,6 +93,7 @@ try {
                 const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
                 embed.setColor('Green');
                 interaction.update({ embeds: [embed], components: []});
+                getMove();
                 return;
             }
             else
@@ -106,6 +112,8 @@ try {
             messageCoin.coins += messageCoin.bet;
             await messageCoin.save().catch((error) => console.log(error));
             interaction.update({ embeds: [embed], components: [] });
+            getMove();
+            return;
         }
         else if (botMove === 'scissors')
         {
@@ -114,15 +122,14 @@ try {
             messageCoin.coins -= messageCoin.bet;
             await messageCoin.save().catch((error) => console.log(error));
             interaction.update({ embeds: [embed], components: []});
+            getMove();
+            return;
         }
         else if (botMove === 'paper')
         {
             const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
             interaction.update({ embeds: [embed], components: []});
-        }
-        else
-        {
-            console.log('Error');
+            getMove();
             return;
         }
         //Scissors Logic
@@ -135,11 +142,15 @@ try {
                 messageCoin.coins -= messageCoin.bet;
                 await messageCoin.save().catch((error) => console.log(error));
                 interaction.update({ embeds: [embed], components: []});
+                getMove();
+                return;
             }
             else if (botMove === 'scissors')
             {
                 const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
                 interaction.update({ embeds: [embed], components: []});
+                getMove();
+                return;
             }
             else if (botMove === 'paper')
             {
@@ -148,14 +159,26 @@ try {
                 messageCoin.coins += messageCoin.bet;
                 await messageCoin.save().catch((error) => console.log(error));
                 interaction.update({ embeds: [embed], components: []});
+                getMove();
+                return;
             }
             else
             {
                 console.log('Error');
                 return;
             }
-        }
 
+        }
+        if (messageCoin.coins === null || messageCoin.coins === undefined)
+        {
+            const newCoin = new Coin({
+                userID: user.id,
+                guildID: message.guild.id,
+                coins: 20,
+            });
+
+            await newCoin.save();
+        }
        
     }
     });
