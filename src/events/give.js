@@ -12,6 +12,7 @@ module.exports["Give"] = async (client, message) => {
     if (!message.inGuild()) return;
     const user = message.options.getUser('user');
     const numbertoGive = message.options.getInteger('amount');
+    
     const recieverQuery = {
         userID: user.id,
         guildID: message.guild.id,

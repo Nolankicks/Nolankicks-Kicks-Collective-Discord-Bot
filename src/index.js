@@ -1,10 +1,11 @@
 require('dotenv').config();
-const { Client, IntentsBitField, cleanCodeBlockContent, channelLink  } = require('discord.js');
+const { Client, IntentsBitField, cleanCodeBlockContent, channelLink, EmbedBuilder, ActionRowBuilder  } = require('discord.js');
 const mongoose = require('mongoose'); 
 const { RPS } = require('./events/rps.js');
 const { Logger } = require('./events/logger.js');
 const { Balance } = require('./events/balance.js');
 const { Give } = require('./events/give.js');
+const Coin = require('./events/kicksCoinSchema.js');
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -20,7 +21,15 @@ try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to the database');
     Logger(client);
-    RPS(client);
+    const rps = RPS(client);
+    //GetMove function
+    function getMove() {
+        const replies = ['paper', 'rock', 'scissors' ];
+        const random = Math.floor(Math.random() * 3)
+        
+        return replies[random]
+    }
+    const botMove = getMove();
     //Check for balance
     client.on('interactionCreate', (interaction) => 
     {
@@ -30,7 +39,7 @@ try {
         return;
         }
     });
-    //Check for give
+    //Check for /give
     client.on('interactionCreate', (interaction) => 
     {
         if (interaction.commandName === 'give')
@@ -39,7 +48,117 @@ try {
             return;
         }
     });
+    //Check for /RPS
+    
+    client.on('interactionCreate', async (interaction) =>
+    {
+        if (!interaction.isButton()) return;
+        const query = {
+            userID: interaction.user.id,
+            guildID: interaction.guild.id,
+        };
+        const messageCoin = await Coin.findOne(query);
+        console.log(messageCoin.bet)
+        
+        const row = new ActionRowBuilder();
+        //Rock Logic
+        if (interaction.customId === 'rock')
+        {
+            if (botMove === 'rock')
+            {
+                const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
+                interaction.update({ embeds: [embed], components: [] });
+                return;
+            }
+            else if (botMove === 'paper')
+            {
+                messageCoin.coins -= messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
+                embed.setColor('Red');
+                interaction.update({ embeds: [embed], components: []});
+                return;
+            
+            }
+            else if (botMove === 'scissors')
+            {
+                
+                messageCoin.coins += messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
+                embed.setColor('Green');
+                interaction.update({ embeds: [embed], components: []});
+                return;
+            }
+            else
+            {
+                console.log('Error');
+                return;
+            }
+        }
+        //Paper Logic
+        if (interaction.customId === 'paper')
+        {
+        if (botMove === 'rock')
+        {
+            const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
+            embed.setColor('Green');
+            messageCoin.coins += messageCoin.bet;
+            await messageCoin.save().catch((error) => console.log(error));
+            interaction.update({ embeds: [embed], components: [] });
+        }
+        else if (botMove === 'scissors')
+        {
+            const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
+            embed.setColor('Red');
+            messageCoin.coins -= messageCoin.bet;
+            await messageCoin.save().catch((error) => console.log(error));
+            interaction.update({ embeds: [embed], components: []});
+        }
+        else if (botMove === 'paper')
+        {
+            const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
+            interaction.update({ embeds: [embed], components: []});
+        }
+        else
+        {
+            console.log('Error');
+            return;
+        }
+        //Scissors Logic
+        if (interaction.customId === 'scissors')
+        {
+            if (botMove === 'rock')
+            {
+                const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
+                embed.setColor('Red');
+                messageCoin.coins -= messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                interaction.update({ embeds: [embed], components: []});
+            }
+            else if (botMove === 'scissors')
+            {
+                const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
+                interaction.update({ embeds: [embed], components: []});
+            }
+            else if (botMove === 'paper')
+            {
+                const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
+                embed.setColor('Green');
+                messageCoin.coins += messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                interaction.update({ embeds: [embed], components: []});
+            }
+            else
+            {
+                console.log('Error');
+                return;
+            }
+        }
 
+       
+    }
+    });
     client.login(process.env.TOKEN);  
 } catch (error) {
     console.log(error);
