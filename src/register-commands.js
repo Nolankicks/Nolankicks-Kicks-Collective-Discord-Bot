@@ -12,22 +12,6 @@ const commands = [
                 type: ApplicationCommandOptionType.Integer,
                 required: true,
             },
-            {
-            name: 'rock',
-            description: 'Choose rock',
-            type: ApplicationCommandOptionType.Boolean,
-            },
-            {
-            name: 'paper',
-            description: 'Choose paper',
-            type: ApplicationCommandOptionType.Boolean,
-            },
-            {
-            name: 'scissors',
-            description: 'Choose scissors',
-            type: ApplicationCommandOptionType.Boolean,
-            },
-
         ],
     },
     {

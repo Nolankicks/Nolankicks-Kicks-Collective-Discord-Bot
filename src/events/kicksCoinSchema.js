@@ -13,6 +13,11 @@ const kicksCoinSchema =  new Schema({
         type: Number,
         default: 0,
     },
-});
+    bet: {
+        type: Number,
+        default: 0,
+    },
+    }
+);
 
 module.exports = model('kickscoin', kicksCoinSchema);

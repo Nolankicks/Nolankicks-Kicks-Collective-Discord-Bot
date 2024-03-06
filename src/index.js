@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, IntentsBitField, cleanCodeBlockContent, channelLink  } = require('discord.js');
+const { Client, IntentsBitField, cleanCodeBlockContent, channelLink, EmbedBuilder  } = require('discord.js');
 const mongoose = require('mongoose'); 
 const { RPS } = require('./events/rps.js');
 const { Logger } = require('./events/logger.js');
@@ -56,11 +56,105 @@ try {
             guildID: interaction.guild.id,
         };
         const messageCoin = await Coin.findOne(query);
-        console.log(rps.row);
+        console.log(messageCoin.bet)
+        const botMove = getMove();
+        //Rock Logic
         if (interaction.customId === 'rock')
         {
-            interaction.reply( `You have${messageCoin.coins} coins` );
+            if (botMove === 'rock')
+            {
+                const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
+                interaction.update({ embeds: [embed] });
+                return;
+            }
+            else if (botMove === 'paper')
+            {
+                messageCoin.coins -= messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
+                embed.setColor('Red');
+                interaction.update({ embeds: [embed] });
+                return;
+            
+            }
+            else if (botMove === 'scissors')
+            {
+                
+                messageCoin.coins += messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
+                embed.setColor('Green');
+                interaction.update({ embeds: [embed] });
+                return;
+            }
+            else
+            {
+                console.log('Error');
+                return;
+            }
         }
+        //Paper Logic
+        if (interaction.customId === 'paper')
+        {
+        if (botMove === 'rock')
+        {
+            const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
+            embed.setColor('Green');
+            messageCoin.coins += messageCoin.bet;
+            await messageCoin.save().catch((error) => console.log(error));
+            interaction.update({ embeds: [embed] });
+        }
+        else if (botMove === 'scissors')
+        {
+            const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
+            embed.setColor('Red');
+            messageCoin.coins -= messageCoin.bet;
+            await messageCoin.save().catch((error) => console.log(error));
+            interaction.update({ embeds: [embed] });
+        }
+        else if (botMove === 'paper')
+        {
+            const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
+            interaction.update({ embeds: [embed] });
+        }
+        else
+        {
+            console.log('Error');
+            return;
+        }
+        //Scissors Logic
+        if (interaction.customId === 'scissors')
+        {
+            if (botMove === 'rock')
+            {
+                const embed = new EmbedBuilder().setTitle('You lose!').setFooter({ text: 'Play again!' });
+                embed.setColor('Red');
+                messageCoin.coins -= messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                interaction.update({ embeds: [embed] });
+            }
+            else if (botMove === 'scissors')
+            {
+                const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
+                interaction.update({ embeds: [embed] });
+            }
+            else if (botMove === 'paper')
+            {
+                const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
+                embed.setColor('Green');
+                messageCoin.coins += messageCoin.bet;
+                await messageCoin.save().catch((error) => console.log(error));
+                interaction.update({ embeds: [embed] });
+            }
+            else
+            {
+                console.log('Error');
+                return;
+            }
+        }
+
+       
+    }
     });
     client.login(process.env.TOKEN);  
 } catch (error) {

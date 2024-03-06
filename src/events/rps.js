@@ -1,6 +1,7 @@
 const { Client, ButtonBuilder, ButtonStyle, ActionRowBuilder, cleanCodeBlockContent, Interaction  } = require('discord.js');
 const Coin = require('./kicksCoinSchema.js');
 const { EmbedBuilder } = require('discord.js');
+const mongoose = require('mongoose'); 
 module.exports["RPS"] = async (Client) => 
 {
     const client = Client;
@@ -35,9 +36,19 @@ module.exports["RPS"] = async (Client) =>
             });
             if (interaction.commandName === 'rps')
             {
+                
+                const bet = interaction.options.getInteger('bet');
+                const query = {
+                    userID: interaction.user.id,
+                    guildID: interaction.guild.id,
+                };
+                const messageCoin = await Coin.findOne(query);
+                const embed = new EmbedBuilder().setTitle('Choose your move!').setFooter({ text: `You have ${messageCoin.coins} coins` });
+                messageCoin.bet = bet;
+                await messageCoin.save().catch((error) => console.log(error));
                 await interaction.reply(
                     {
-                        content : 'Choose your move!',
+                        embeds: [embed],
                         components: [row],
                     }
                 )
