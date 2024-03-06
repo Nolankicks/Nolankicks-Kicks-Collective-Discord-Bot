@@ -40,6 +40,7 @@ module.exports["RPS"] = async (Client) =>
                     userID: interaction.user.id,
                     guildID: interaction.guild.id,
                 };
+
                 const messageCoin = await Coin.findOne(query);
                 if (messageCoin)
                 {
