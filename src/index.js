@@ -5,7 +5,9 @@ const { RPS } = require('./events/rps.js');
 const { Logger } = require('./events/logger.js');
 const { Balance } = require('./events/balance.js');
 const { Give } = require('./events/give.js');
+const { GetCoins } = require('./events/getcoins.js');
 const Coin = require('./events/kicksCoinSchema.js');
+
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -24,12 +26,17 @@ function getMove() {
 
 (async () => {
 try {
+
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to the database');
     Logger(client);
-    const rps = RPS(client);
-    //GetMove function
+    RPS(client);
+    client.on('messageCreate', async (message) => {
+        //GetCoins(client, message);
+        
+    });
     
+    //GetMove function
     
     //Check for balance
     client.on('interactionCreate', (interaction) => 
@@ -56,17 +63,19 @@ try {
         if (!interaction.isButton()) return;
         const botMove = getMove();
         getMove();
-        const query = {
+        const intquery = {
             userID: interaction.user.id,
             guildID: interaction.guild.id,
         };
-        const messageCoin = await Coin.findOne(query);
+        const messageCoin = await Coin.findOne(intquery);
         console.log(messageCoin.bet)
         
         const row = new ActionRowBuilder();
         //Rock Logic
         if (interaction.customId === 'rock')
         {
+            if (messageCoin)
+            {
             if (botMove === 'rock')
             {
                 const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
@@ -169,17 +178,19 @@ try {
             }
 
         }
-        if (messageCoin.coins === null || messageCoin.coins === undefined)
-        {
-            const newCoin = new Coin({
-                userID: user.id,
-                guildID: message.guild.id,
-                coins: 20,
-            });
+    }
+    else
+    {
+        const newCoin = new Coin({
+            userID: user.id,
+            guildID: message.guild.id,
+            coins: 20,
+        });
 
-            await newCoin.save();
-        }
-       
+        await newCoin.save();
+        interaction.reply('Coins have been added to the database!, please try again!');
+        return;
+    }
     }
     });
     client.login(process.env.TOKEN);  

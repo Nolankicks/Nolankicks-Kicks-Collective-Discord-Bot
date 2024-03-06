@@ -40,6 +40,7 @@ module.exports["Balance"] = async (client, message) => {
             });
 
             await newCoin.save();
+            message.reply('Coins have been placed in the database!, please try again!');
         }
         return;
     } catch (error) {

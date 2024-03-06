@@ -36,13 +36,14 @@ module.exports["RPS"] = async (Client) =>
             });
             if (interaction.commandName === 'rps')
             {
-                
-                const bet = interaction.options.getInteger('bet');
                 const query = {
                     userID: interaction.user.id,
                     guildID: interaction.guild.id,
                 };
                 const messageCoin = await Coin.findOne(query);
+                if (messageCoin)
+                {
+                const bet = interaction.options.getInteger('bet');
                 const embed = new EmbedBuilder().setTitle('Choose your move!').setFooter({ text: `You have ${messageCoin.coins} coins` });
                 messageCoin.bet = bet;
                 await messageCoin.save().catch((error) => console.log(error));
@@ -54,6 +55,20 @@ module.exports["RPS"] = async (Client) =>
                 )
                 
             }
+            else
+            {
+                console.log('No coins');
+                const newCoin = new Coin({
+                    userID: interaction.user.id,
+                    guildID: interaction.guild.id,
+                    coins: 20,
+                });
+    
+                await newCoin.save();
+                interaction.reply('Coins have been placed in the database!, please try again!');
+            }
+        }
+       
         } catch (error) {
             console.log(error);
         }
