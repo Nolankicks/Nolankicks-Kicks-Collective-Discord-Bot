@@ -7,6 +7,7 @@ const { Balance } = require('./events/balance.js');
 const { Give } = require('./events/give.js');
 const { GetCoins } = require('./events/getcoins.js');
 const Coin = require('./events/kicksCoinSchema.js');
+const { Leaderboard } = require('./events/leaderboard.js');
 
 const client = new Client({
     intents: [
@@ -30,6 +31,7 @@ try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to the database');
     Logger(client);
+    Leaderboard(client);
     RPS(client);
     client.on('messageCreate', async (message) => {
         //GetCoins(client, message);
