@@ -35,6 +35,10 @@ const commands = [
                 required: true,
             }
         ]
+    },
+    {
+        name: 'leaderboard',
+        description: 'Check the top 10 users with the most coins',
     }
 ];
 const rest = new REST({ version: '10'}).setToken(process.env.TOKEN);
