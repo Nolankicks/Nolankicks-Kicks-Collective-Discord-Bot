@@ -4,5 +4,6 @@ const Coin = require('./kicksCoinSchema.js');
 
 module.exports["Leaderboard"] = async (Client) =>
 {
+    const client = Client;
 
 }

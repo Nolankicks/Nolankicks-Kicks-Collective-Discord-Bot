@@ -44,7 +44,10 @@ module.exports["RPS"] = async (Client) =>
                 const messageCoin = await Coin.findOne(query);
                 if (messageCoin)
                 {
+                
                 const bet = interaction.options.getInteger('bet');
+                if (bet <= messageCoin.coins && bet > 0)
+                {
                 const embed = new EmbedBuilder().setTitle('Choose your move!').setFooter({ text: `You have ${messageCoin.coins} coins` });
                 messageCoin.bet = bet;
                 await messageCoin.save().catch((error) => console.log(error));
@@ -54,7 +57,11 @@ module.exports["RPS"] = async (Client) =>
                         components: [row],
                     }
                 )
-                
+                }
+                else
+                {
+                    interaction.reply({content: 'You don\'t have enough coins or you bet less than 0!', ephemeral: true});
+                }
             }
             else
             {
