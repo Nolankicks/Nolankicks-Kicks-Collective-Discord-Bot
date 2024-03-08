@@ -5,9 +5,9 @@ const { RPS } = require('./events/rps.js');
 const { Logger } = require('./events/logger.js');
 const { Balance } = require('./events/balance.js');
 const { Give } = require('./events/give.js');
-const { GetCoins } = require('./events/getcoins.js');
 const Coin = require('./events/kicksCoinSchema.js');
 const { Leaderboard } = require('./events/leaderboard.js');
+const { Daily } = require('./events/daily.js');
 
 const client = new Client({
     intents: [
@@ -34,10 +34,14 @@ try {
     Leaderboard(client);
     RPS(client);
     client.on('messageCreate', async (message) => {
-        //GetCoins(client, message);
-        
     });
-    
+    client.on('interactionCreate', async (interaction) => {
+        if (interaction.commandName === 'daily')
+        {
+            
+        }
+
+    });
     //GetMove function
     
     //Check for balance
@@ -208,6 +212,7 @@ try {
             userID: user.id,
             guildID: message.guild.id,
             coins: 20,
+            lastDaily: new Date(),
         });
 
         await newCoin.save();

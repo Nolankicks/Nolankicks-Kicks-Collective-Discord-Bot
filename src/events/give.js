@@ -60,6 +60,7 @@ module.exports["Give"] = async (client, message) => {
                 userID: user.id,
                 guildID: message.guild.id,
                 coins: 20,
+                lastDaily: new Date(),
             });
 
             await newCoin.save();

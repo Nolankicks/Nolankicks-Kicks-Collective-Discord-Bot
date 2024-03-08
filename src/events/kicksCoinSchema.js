@@ -17,6 +17,10 @@ const kicksCoinSchema =  new Schema({
         type: Number,
         default: 0,
     },
+    lastDaily: {
+        type: Date,
+        reqired: true,
+    }
     }
 );
 

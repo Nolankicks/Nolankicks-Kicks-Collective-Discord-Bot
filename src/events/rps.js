@@ -2,6 +2,7 @@ const { Client, ButtonBuilder, ButtonStyle, ActionRowBuilder, cleanCodeBlockCont
 const Coin = require('./kicksCoinSchema.js');
 const { EmbedBuilder } = require('discord.js');
 const mongoose = require('mongoose'); 
+
 module.exports["RPS"] = async (Client) => 
 {
     const client = Client;
@@ -70,13 +71,14 @@ module.exports["RPS"] = async (Client) =>
                     userID: interaction.user.id,
                     guildID: interaction.guild.id,
                     coins: 20,
+                    lastDaily: new Date(),
                 });
     
                 await newCoin.save();
                 interaction.reply('Coins have been placed in the database!, please try again!');
             }
         }
-       
+        
         } catch (error) {
             console.log(error);
         }
