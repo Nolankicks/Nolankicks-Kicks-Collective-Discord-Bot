@@ -46,7 +46,7 @@ module.exports["RPS"] = async (Client) =>
                 {
                 
                 const bet = interaction.options.getInteger('bet');
-                if (bet <= messageCoin.coins && bet > 0)
+                if (bet <= messageCoin.coins && bet >= 0)
                 {
                 const embed = new EmbedBuilder().setTitle('Choose your move!').setFooter({ text: `You have ${messageCoin.coins} coins` });
                 messageCoin.bet = bet;

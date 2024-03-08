@@ -74,10 +74,11 @@ try {
         
         const row = new ActionRowBuilder();
         //Rock Logic
+        if (messageCoin)
+        {
         if (interaction.customId === 'rock')
         {
-            if (messageCoin)
-            {
+
             if (botMove === 'rock')
             {
                 const embed = new EmbedBuilder().setTitle('It\'s a tie!').setFooter({ text: 'Play again!' });
@@ -98,8 +99,14 @@ try {
             }
             else if (botMove === 'scissors')
             {
-                
+                if (messageCoin.bet == 0)
+                {
+                    messageCoin.coins += 1;
+                }
+                else
+                {
                 messageCoin.coins += messageCoin.bet;
+                }
                 await messageCoin.save().catch((error) => console.log(error));
                 const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
                 embed.setColor('Green');
@@ -120,7 +127,14 @@ try {
         {
             const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
             embed.setColor('Green');
+            if (messageCoin.bet == 0)
+            {
+                messageCoin.coins += 1;
+            }
+            else
+            {
             messageCoin.coins += messageCoin.bet;
+            }
             await messageCoin.save().catch((error) => console.log(error));
             interaction.update({ embeds: [embed], components: [] });
             getMove();
@@ -167,7 +181,14 @@ try {
             {
                 const embed = new EmbedBuilder().setTitle('You win!').setFooter({ text: 'Play again!' });
                 embed.setColor('Green');
+                if (messageCoin.bet == 0)
+                {
+                    messageCoin.coins += 1;
+                }
+                else
+                {
                 messageCoin.coins += messageCoin.bet;
+                }
                 await messageCoin.save().catch((error) => console.log(error));
                 interaction.update({ embeds: [embed], components: []});
                 getMove();

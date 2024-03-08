@@ -54,7 +54,7 @@ module.exports["Give"] = async (client, message) => {
                 return;
             }
         }
-        if (recieverCoins.coins === null || recieverCoins.coins === undefined)
+        else
         {
             const newCoin = new Coin({
                 userID: user.id,
@@ -63,6 +63,7 @@ module.exports["Give"] = async (client, message) => {
             });
 
             await newCoin.save();
+            message.reply('User has been added to the database!');
         }
         return;
 
