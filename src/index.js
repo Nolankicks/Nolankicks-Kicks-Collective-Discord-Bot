@@ -33,14 +33,15 @@ try {
     Logger(client);
     Leaderboard(client);
     RPS(client);
+    
     client.on('messageCreate', async (message) => {
     });
     client.on('interactionCreate', async (interaction) => {
-        if (interaction.commandName === 'daily')
-        {
-            
-        }
-
+    if (interaction.commandName === 'daily')
+    {
+        //Daily(client, interaction);
+        return;
+    }
     });
     //GetMove function
     
@@ -209,10 +210,9 @@ try {
     else
     {
         const newCoin = new Coin({
-            userID: user.id,
+            userID: messageCoin.id,
             guildID: message.guild.id,
             coins: 20,
-            lastDaily: new Date(),
         });
 
         await newCoin.save();

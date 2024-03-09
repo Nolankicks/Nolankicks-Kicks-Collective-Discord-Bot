@@ -71,7 +71,6 @@ module.exports["RPS"] = async (Client) =>
                     userID: interaction.user.id,
                     guildID: interaction.guild.id,
                     coins: 20,
-                    lastDaily: new Date(),
                 });
     
                 await newCoin.save();

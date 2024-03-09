@@ -9,6 +9,11 @@ const kicksCoinSchema =  new Schema({
         type: String,
         required: true,
     },
+    DailyDate:
+    {
+        type: Date,
+    },
+    
     coins: {
         type: Number,
         default: 0,
@@ -17,11 +22,8 @@ const kicksCoinSchema =  new Schema({
         type: Number,
         default: 0,
     },
-    lastDaily: {
-        type: Date,
-        reqired: true,
-    }
-    }
+
+}
 );
 
 module.exports = model('kickscoin', kicksCoinSchema);
