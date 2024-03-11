@@ -8,6 +8,7 @@ const { Give } = require('./events/give.js');
 const Coin = require('./events/kicksCoinSchema.js');
 const { Leaderboard } = require('./events/leaderboard.js');
 const { Daily } = require('./events/daily.js');
+const { Link } = require('./events/link.js');
 
 const client = new Client({
     intents: [
@@ -33,7 +34,7 @@ try {
     Logger(client);
     Leaderboard(client);
     RPS(client);
-
+    Link(client);
     //GetMove function
     
     //Check for balance

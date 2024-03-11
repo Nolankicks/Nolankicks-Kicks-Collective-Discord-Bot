@@ -44,6 +44,18 @@ const commands = [
         name: 'daily',
         description: 'Claim your daily coins',
     },
+    {
+        name: 'link',
+        description: 'Link steam account to the bot',
+        options: [
+            {
+                name: 'steamid',
+                description: 'Your steam id',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            }
+        ]
+    }
 ];
 const rest = new REST({ version: '10'}).setToken(process.env.TOKEN);
 

@@ -22,6 +22,9 @@ const kicksCoinSchema =  new Schema({
         type: Number,
         default: 0,
     },
+    steamid: {
+        type: String,
+    },
 
 }
 );
