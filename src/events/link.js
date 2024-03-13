@@ -34,10 +34,11 @@ module.exports["Link"] = async (Client) =>
                     const newUser = new Coin({
                         userID: interaction.user.id,
                         guildID: interaction.guild.id,
+                        steamid: interaction.options.getString('steamid'),
                         coins: 20,
                     });
                     await newUser.save();
-                    interaction.reply('You have been added to the database, please try again!');
+                    interaction.reply('Your account has been linked!');
                     return;
                 }
             }
