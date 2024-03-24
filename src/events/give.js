@@ -31,6 +31,13 @@ module.exports["Give"] = async (client, message) => {
             return;
         }
 
+        if (numbertoGive <= 0)
+        {
+            const givePositive = new EmbedBuilder().setTitle('Invalid amount!').setFooter({ text: 'Your amount must be greater than zero!' });
+            message.reply({ embeds: [givePositive] });
+            return;
+        }
+
         const recieverCoins = await Coin.findOne(recieverQuery);
         console.log(recieverCoins.coins);
         
